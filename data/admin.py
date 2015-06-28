@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from glue.admin import RelatedContentInline
+from genericadmin.admin import GenericAdminModelAdmin
+
+from .models import Data
+
+@admin.register(Data)
+class DataAdmin(GenericAdminModelAdmin):
+    inlines = [RelatedContentInline]
