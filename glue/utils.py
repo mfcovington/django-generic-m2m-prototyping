@@ -41,3 +41,24 @@ def get_related_data_publication(object):
     return [getattr(related, related_content_object)
         for related in sorted(data_publication_relationships,
             key=lambda x: getattr(x, related_content_object).name.lower())]
+
+def get_related_content(related_type, object):
+    """
+    Usage:
+        from data.models import Data
+        data_object = Data.objects.first()
+        get_related_content('publication', data_object)
+    """
+    content_type = ContentType.objects.get_for_model(object)
+    class_name = type(object).__name__.lower()
+    kwargs = {
+        '{}_content_type__pk'.format(class_name): content_type.id,
+        '{}_object_id'.format(class_name): object.id,
+    }
+    relationships = getattr(object, related_type).model.objects.filter(**kwargs)
+
+    related_content_object = '{}_content_object'.format(related_type)
+
+    return [getattr(related, related_content_object)
+        for related in sorted(relationships,
+            key=lambda x: getattr(x, related_content_object).name.lower())]
