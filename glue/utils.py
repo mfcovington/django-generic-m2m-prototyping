@@ -54,7 +54,8 @@ def get_related_content(object, object_type, related_type):
         '{}_content_type__pk'.format(object_type): content_type.id,
         '{}_object_id'.format(object_type): object.id,
     }
-    relationships = getattr(object, related_type).model.objects.filter(**kwargs)
+    relationships = getattr(object,
+        'related_{}'.format(related_type)).model.objects.filter(**kwargs)
 
     related_content_object = '{}_content_object'.format(related_type)
 

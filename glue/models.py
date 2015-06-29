@@ -25,13 +25,13 @@ class DataPublicationRelationship(models.Model):
     data_object_id = models.PositiveIntegerField()
     data_content_object = GenericForeignKey('data_content_type', 'data_object_id')
 
-    publication_limit = models.Q(app_label='publication', model='publication') | \
+    publications_limit = models.Q(app_label='publication', model='publication') | \
         models.Q(app_label='publication', model='publicationset')
-    publication_content_type = models.ForeignKey(ContentType, limit_choices_to=publication_limit, related_name='related_pubs')
-    publication_object_id = models.PositiveIntegerField()
-    publication_content_object = GenericForeignKey('publication_content_type', 'publication_object_id')
+    publications_content_type = models.ForeignKey(ContentType, limit_choices_to=publications_limit, related_name='related_publications')
+    publications_object_id = models.PositiveIntegerField()
+    publications_content_object = GenericForeignKey('publications_content_type', 'publications_object_id')
 
     def __str__(self):
         return "{}: {} ⟷ {}: {}".format(
             self.data_content_type.name, self.data_content_object,
-            self.publication_content_type.name, self.publication_content_object)
+            self.publications_content_type.name, self.publications_content_object)

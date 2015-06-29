@@ -7,8 +7,8 @@ from .models import DataPublicationRelationship, RelatedContent
 
 class PublicationToDataRelationshipInline(GenericTabularInline):
     model = DataPublicationRelationship
-    ct_field = 'publication_content_type'
-    ct_fk_field = 'publication_object_id'
+    ct_field = 'publications_content_type'
+    ct_fk_field = 'publications_object_id'
     ordering = ['data_content_type']
 
 
@@ -16,7 +16,7 @@ class DataToPublicationRelationshipInline(GenericTabularInline):
     model = DataPublicationRelationship
     ct_field = 'data_content_type'
     ct_fk_field = 'data_object_id'
-    ordering = ['publication_content_type']
+    ordering = ['publications_content_type']
 
 
 @admin.register(DataPublicationRelationship)

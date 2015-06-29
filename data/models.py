@@ -7,9 +7,9 @@ from glue.models import DataPublicationRelationship
 class Data(models.Model):
     name = models.CharField(max_length=50,)
     description = models.TextField()
-    publication = GenericRelation(DataPublicationRelationship,
-        content_type_field='publication_content_type',
-        object_id_field='publication_object_id',
+    related_publications = GenericRelation(DataPublicationRelationship,
+        content_type_field='publications_content_type',
+        object_id_field='publications_object_id',
         related_query_name='data',
     )
 
@@ -23,9 +23,9 @@ class Data(models.Model):
 class DataSet(models.Model):
     name = models.CharField(max_length=50,)
     description = models.TextField()
-    publication = GenericRelation(DataPublicationRelationship,
-        content_type_field='publication_content_type',
-        object_id_field='publication_object_id',
+    related_publications = GenericRelation(DataPublicationRelationship,
+        content_type_field='publications_content_type',
+        object_id_field='publications_object_id',
         related_query_name='data',
     )
 
