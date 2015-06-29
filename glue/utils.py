@@ -61,4 +61,6 @@ def get_related_content(related_type, object):
 
     return [getattr(related, related_content_object)
         for related in sorted(relationships,
-            key=lambda x: getattr(x, related_content_object).name.lower())]
+            key=lambda x: (
+                type(getattr(x, related_content_object)).__name__.lower(),
+                getattr(x, related_content_object).name.lower()))]
