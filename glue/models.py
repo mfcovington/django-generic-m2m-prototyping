@@ -19,12 +19,14 @@ class RelatedContent(models.Model):
 
 class DataPublicationRelationship(models.Model):
 
-    data_limit = models.Q(app_label='data', model='data')
+    data_limit = models.Q(app_label='data', model='data') | \
+        models.Q(app_label='data', model='dataset')
     data_content_type = models.ForeignKey(ContentType, limit_choices_to=data_limit, related_name='related_data')
     data_object_id = models.PositiveIntegerField()
     data_content_object = GenericForeignKey('data_content_type', 'data_object_id')
 
-    publication_limit = models.Q(app_label='publication', model='publication')
+    publication_limit = models.Q(app_label='publication', model='publication') | \
+        models.Q(app_label='publication', model='publicationset')
     publication_content_type = models.ForeignKey(ContentType, limit_choices_to=publication_limit, related_name='related_pubs')
     publication_object_id = models.PositiveIntegerField()
     publication_content_object = GenericForeignKey('publication_content_type', 'publication_object_id')
