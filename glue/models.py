@@ -31,7 +31,7 @@ class DataRelationshipBase(models.Model):
     data_content_object = GenericForeignKey('data_content_type', 'data_object_id')
 
     def data_identifier(self):
-        return "{}: {}".format(self.data_content_type.name, self.data_content_object)
+        return "{}: {}".format(self.data_content_type.name.upper(), self.data_content_object)
 
     class Meta:
         abstract = True
@@ -45,7 +45,7 @@ class PublicationRelationshipBase(models.Model):
     publications_content_object = GenericForeignKey('publications_content_type', 'publications_object_id')
 
     def publications_identifier(self):
-        return "{}: {}".format(self.publications_content_type.name, self.publications_content_object)
+        return "{}: {}".format(self.publications_content_type.name.upper(), self.publications_content_object)
 
     class Meta:
         abstract = True
@@ -58,7 +58,7 @@ class ScientistRelationshipBase(models.Model):
     scientists_content_object = GenericForeignKey('scientists_content_type', 'scientists_object_id')
 
     def scientists_identifier(self):
-        return "{}: {}".format(self.scientists_content_type.name, self.scientists_content_object)
+        return "{}: {}".format(self.scientists_content_type.name.upper(), self.scientists_content_object)
 
     class Meta:
         abstract = True
