@@ -1,16 +1,16 @@
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 
-from glue.models import DataPublicationRelationship, DataScientistRelationship
+from glue.models import DataPublicationsRelationship, DataScientistsRelationship
 
 
 class DataRelationsBase(models.Model):
-    related_publications = GenericRelation(DataPublicationRelationship,
+    related_publications = GenericRelation(DataPublicationsRelationship,
         content_type_field='publications_content_type',
         object_id_field='publications_object_id',
         related_query_name='data',
     )
-    related_scientists = GenericRelation(DataScientistRelationship,
+    related_scientists = GenericRelation(DataScientistsRelationship,
         content_type_field='scientists_content_type',
         object_id_field='scientists_object_id',
         related_query_name='data',

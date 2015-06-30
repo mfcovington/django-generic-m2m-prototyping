@@ -1,10 +1,10 @@
 from django.contrib.contenttypes.models import ContentType
 
-from .models import DataPublicationRelationship
+from .models import DataPublicationsRelationship
 
 def get_related_publications(data_object):
     data_content_type = ContentType.objects.get_for_model(data_object)
-    data_publication_relationships = DataPublicationRelationship.objects.filter(
+    data_publication_relationships = DataPublicationsRelationship.objects.filter(
         data_content_type__pk=data_content_type.id, data_object_id=data_object.id)
 
     return [related.publication_content_object
@@ -13,7 +13,7 @@ def get_related_publications(data_object):
 
 def get_related_data(publication_object):
     publication_content_type = ContentType.objects.get_for_model(publication_object)
-    data_publication_relationships = DataPublicationRelationship.objects.filter(
+    data_publication_relationships = DataPublicationsRelationship.objects.filter(
         publication_content_type__pk=publication_content_type.id, publication_object_id=publication_object.id)
 
     return [related.data_content_object
@@ -27,7 +27,7 @@ def get_related_data_publication(object):
         '{}_content_type__pk'.format(class_name): content_type.id,
         '{}_object_id'.format(class_name): object.id,
     }
-    data_publication_relationships = DataPublicationRelationship.objects.filter(**kwargs)
+    data_publication_relationships = DataPublicationsRelationship.objects.filter(**kwargs)
 
     if class_name == 'data':
         related_class_name = 'publication'

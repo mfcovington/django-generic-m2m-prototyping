@@ -37,7 +37,7 @@ class DataRelationshipBase(models.Model):
         abstract = True
 
 
-class PublicationRelationshipBase(models.Model):
+class PublicationsRelationshipBase(models.Model):
     publications_limit = models.Q(app_label='publication', model='publication') | \
         models.Q(app_label='publication', model='publicationset')
     publications_content_type = models.ForeignKey(ContentType, limit_choices_to=publications_limit, related_name='%(app_label)s_%(class)s_related_publications')
@@ -51,7 +51,7 @@ class PublicationRelationshipBase(models.Model):
         abstract = True
 
 
-class ScientistRelationshipBase(models.Model):
+class ScientistsRelationshipBase(models.Model):
     scientists_limit = models.Q(app_label='scientist', model='scientist')
     scientists_content_type = models.ForeignKey(ContentType, limit_choices_to=scientists_limit, related_name='%(app_label)s_%(class)s_related_scientists')
     scientists_object_id = models.PositiveIntegerField()
@@ -69,19 +69,19 @@ class ScientistRelationshipBase(models.Model):
 #####################
 
 
-class DataPublicationRelationship(DataRelationshipBase, PublicationRelationshipBase):
+class DataPublicationsRelationship(DataRelationshipBase, PublicationsRelationshipBase):
 
     def __str__(self):
         return "{} ⟷ {}".format(self.data_identifier(), self.publications_identifier())
 
 
-class DataScientistRelationship(DataRelationshipBase, ScientistRelationshipBase):
+class DataScientistsRelationship(DataRelationshipBase, ScientistsRelationshipBase):
 
     def __str__(self):
         return "{} ⟷ {}".format(self.data_identifier(), self.scientists_identifier())
 
 
-class PublicationScientistRelationship(PublicationRelationshipBase, ScientistRelationshipBase):
+class PublicationsScientistsRelationship(PublicationsRelationshipBase, ScientistsRelationshipBase):
 
     def __str__(self):
         return "{} ⟷ {}".format(self.publications_identifier(), self.scientists_identifier())

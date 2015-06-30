@@ -2,8 +2,8 @@ from django.contrib import admin
 
 from genericadmin.admin import GenericAdminModelAdmin, GenericTabularInline
 
-from .models import (DataPublicationRelationship, DataScientistRelationship,
-    PublicationScientistRelationship, RelatedContent)
+from .models import (DataPublicationsRelationship, DataScientistsRelationship,
+    PublicationsScientistsRelationship, RelatedContent)
 
 
 #######################
@@ -16,12 +16,12 @@ class FromData():
     ct_fk_field = 'data_object_id'
 
 
-class FromPublication():
+class FromPublications():
     ct_field = 'publications_content_type'
     ct_fk_field = 'publications_object_id'
 
 
-class FromScientist():
+class FromScientists():
     ct_field = 'scientists_content_type'
     ct_fk_field = 'scientists_object_id'
 
@@ -30,11 +30,11 @@ class ToData():
     ordering = ['data_content_type']
 
 
-class ToPublication():
+class ToPublications():
     ordering = ['publications_content_type']
 
 
-class ToScientist():
+class ToScientists():
     ordering = ['scientists_content_type']
 
 
@@ -43,40 +43,40 @@ class ToScientist():
 ############################
 
 
-class DataToPublicationRelationshipInline(FromData, ToPublication,
+class DataToPublicationsRelationshipInline(FromData, ToPublications,
     GenericTabularInline):
 
-    model = DataPublicationRelationship
+    model = DataPublicationsRelationship
 
 
-class DataToScientistRelationshipInline(FromData, ToScientist,
+class DataToScientistsRelationshipInline(FromData, ToScientists,
     GenericTabularInline):
 
-    model = DataScientistRelationship
+    model = DataScientistsRelationship
 
 
-class PublicationToDataRelationshipInline(FromPublication, ToData,
+class PublicationsToDataRelationshipInline(FromPublications, ToData,
     GenericTabularInline):
 
-    model = DataPublicationRelationship
+    model = DataPublicationsRelationship
 
 
-class PublicationToScientistRelationshipInline(FromPublication, ToScientist,
+class PublicationsToScientistsRelationshipInline(FromPublications, ToScientists,
     GenericTabularInline):
 
-    model = PublicationScientistRelationship
+    model = PublicationsScientistsRelationship
 
 
-class ScientistToDataRelationshipInline(FromScientist, ToData,
+class ScientistsToDataRelationshipInline(FromScientists, ToData,
     GenericTabularInline):
 
-    model = DataScientistRelationship
+    model = DataScientistsRelationship
 
 
-class ScientistToPublicationRelationshipInline(FromScientist, ToPublication,
+class ScientistsToPublicationsRelationshipInline(FromScientists, ToPublications,
     GenericTabularInline):
 
-    model = PublicationScientistRelationship
+    model = PublicationsScientistsRelationship
 
 
 #################
@@ -84,17 +84,17 @@ class ScientistToPublicationRelationshipInline(FromScientist, ToPublication,
 #################
 
 
-@admin.register(DataPublicationRelationship)
+@admin.register(DataPublicationsRelationship)
 class DataPublicationsAdmin(GenericAdminModelAdmin):
     pass
 
 
-@admin.register(PublicationScientistRelationship)
-class PublicationScientistAdmin(GenericAdminModelAdmin):
+@admin.register(PublicationsScientistsRelationship)
+class PublicationsScientistsAdmin(GenericAdminModelAdmin):
     pass
 
 
-@admin.register(DataScientistRelationship)
+@admin.register(DataScientistsRelationship)
 class DataScientistsAdmin(GenericAdminModelAdmin):
     pass
 class RelatedContentInline(GenericTabularInline):
