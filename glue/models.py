@@ -17,21 +17,36 @@ class RelatedContent(models.Model):
     def __str__(self):
         return "{}: {}".format(self.content_type.name, self.content_object)
 
-class DataPublicationRelationship(models.Model):
 
+class DataRelationshipBase(models.Model):
     data_limit = models.Q(app_label='data', model='data') | \
         models.Q(app_label='data', model='dataset')
     data_content_type = models.ForeignKey(ContentType, limit_choices_to=data_limit, related_name='related_data')
     data_object_id = models.PositiveIntegerField()
     data_content_object = GenericForeignKey('data_content_type', 'data_object_id')
 
+    def data_identifier(self):
+        return "{}: {}".format(self.data_content_type.name, self.data_content_object)
+
+    class Meta:
+        abstract = True
+
+
+class PublicationRelationshipBase(models.Model):
     publications_limit = models.Q(app_label='publication', model='publication') | \
         models.Q(app_label='publication', model='publicationset')
     publications_content_type = models.ForeignKey(ContentType, limit_choices_to=publications_limit, related_name='related_publications')
     publications_object_id = models.PositiveIntegerField()
     publications_content_object = GenericForeignKey('publications_content_type', 'publications_object_id')
 
+    def publications_identifier(self):
+        return "{}: {}".format(self.publications_content_type.name, self.publications_content_object)
+
+    class Meta:
+        abstract = True
+
+
+class DataPublicationRelationship(DataRelationshipBase, PublicationRelationshipBase):
+
     def __str__(self):
-        return "{}: {} ⟷ {}: {}".format(
-            self.data_content_type.name, self.data_content_object,
-            self.publications_content_type.name, self.publications_content_object)
+        return "{} ⟷ {}".format(self.data_identifier(), self.publications_identifier())
