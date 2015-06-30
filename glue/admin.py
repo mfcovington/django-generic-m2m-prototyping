@@ -6,77 +6,43 @@ from .models import (DataPublicationsRelationship, DataScientistsRelationship,
     PublicationsScientistsRelationship)
 
 
-#######################
-# INLINE BASE CLASSES #
-#######################
+##############################################
+# RELATIONSHIPS FOR GENERATED INLINE CLASSES #
+##############################################
 
 
-class FromData():
-    ct_field = 'data_content_type'
-    ct_fk_field = 'data_object_id'
+relationships = [
+    ('data', 'publications'),
+    ('data', 'scientists'),
+    ('publications', 'scientists'),
+]
 
 
-class FromPublications():
-    ct_field = 'publications_content_type'
-    ct_fk_field = 'publications_object_id'
+###########################
+# GENERATE INLINE CLASSES #
+###########################
 
 
-class FromScientists():
-    ct_field = 'scientists_content_type'
-    ct_fk_field = 'scientists_object_id'
+def generate_tabular_inline_model(relationship):
+    content_1, content_2 = relationship
+    klass_name = '{}To{}RelationshipInline'.format(content_1.capitalize(), content_2.capitalize())
+    klass = type(
+        klass_name,
+        (GenericTabularInline,),
+        {
+            'ct_field': '{}_content_type'.format(content_1.lower()),
+            'ct_fk_field': '{}_object_id'.format(content_1.lower()),
+            'ordering': ['{}_content_type'.format(content_2.lower())],
+            'model': eval('{}{}Relationship'.format(*sorted(map(lambda x: x.capitalize(), r)))),
+            '__module__': __name__,
+        }
+    )
+    globals()[klass_name] = klass
 
 
-class ToData():
-    ordering = ['data_content_type']
-
-
-class ToPublications():
-    ordering = ['publications_content_type']
-
-
-class ToScientists():
-    ordering = ['scientists_content_type']
-
-
-############################
-# COMPOSITE INLINE CLASSES #
-############################
-
-
-class DataToPublicationsRelationshipInline(FromData, ToPublications,
-    GenericTabularInline):
-
-    model = DataPublicationsRelationship
-
-
-class DataToScientistsRelationshipInline(FromData, ToScientists,
-    GenericTabularInline):
-
-    model = DataScientistsRelationship
-
-
-class PublicationsToDataRelationshipInline(FromPublications, ToData,
-    GenericTabularInline):
-
-    model = DataPublicationsRelationship
-
-
-class PublicationsToScientistsRelationshipInline(FromPublications, ToScientists,
-    GenericTabularInline):
-
-    model = PublicationsScientistsRelationship
-
-
-class ScientistsToDataRelationshipInline(FromScientists, ToData,
-    GenericTabularInline):
-
-    model = DataScientistsRelationship
-
-
-class ScientistsToPublicationsRelationshipInline(FromScientists, ToPublications,
-    GenericTabularInline):
-
-    model = PublicationsScientistsRelationship
+for r in relationships:
+    generate_tabular_inline_model(sorted(r))
+    generate_tabular_inline_model(sorted(r, reverse=True))
 
 
 #################
