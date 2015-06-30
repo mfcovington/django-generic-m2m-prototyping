@@ -21,7 +21,7 @@ class RelatedContent(models.Model):
 class DataRelationshipBase(models.Model):
     data_limit = models.Q(app_label='data', model='data') | \
         models.Q(app_label='data', model='dataset')
-    data_content_type = models.ForeignKey(ContentType, limit_choices_to=data_limit, related_name='related_data')
+    data_content_type = models.ForeignKey(ContentType, limit_choices_to=data_limit, related_name='%(app_label)s_%(class)s_related_data')
     data_object_id = models.PositiveIntegerField()
     data_content_object = GenericForeignKey('data_content_type', 'data_object_id')
 
@@ -35,7 +35,7 @@ class DataRelationshipBase(models.Model):
 class PublicationRelationshipBase(models.Model):
     publications_limit = models.Q(app_label='publication', model='publication') | \
         models.Q(app_label='publication', model='publicationset')
-    publications_content_type = models.ForeignKey(ContentType, limit_choices_to=publications_limit, related_name='related_publications')
+    publications_content_type = models.ForeignKey(ContentType, limit_choices_to=publications_limit, related_name='%(app_label)s_%(class)s_related_publications')
     publications_object_id = models.PositiveIntegerField()
     publications_content_object = GenericForeignKey('publications_content_type', 'publications_object_id')
 
