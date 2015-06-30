@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'genericadmin',
     'data',
     'publication',
+    'scientist',
     'glue',
 )
 
