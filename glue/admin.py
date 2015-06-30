@@ -3,7 +3,7 @@ from django.contrib import admin
 from genericadmin.admin import GenericAdminModelAdmin, GenericTabularInline
 
 from .models import (DataPublicationRelationship, DataScientistRelationship,
-    RelatedContent)
+    PublicationScientistRelationship, RelatedContent)
 
 
 #######################
@@ -61,10 +61,22 @@ class PublicationToDataRelationshipInline(FromPublication, ToData,
     model = DataPublicationRelationship
 
 
+class PublicationToScientistRelationshipInline(FromPublication, ToScientist,
+    GenericTabularInline):
+
+    model = PublicationScientistRelationship
+
+
 class ScientistToDataRelationshipInline(FromScientist, ToData,
     GenericTabularInline):
 
     model = DataScientistRelationship
+
+
+class ScientistToPublicationRelationshipInline(FromScientist, ToPublication,
+    GenericTabularInline):
+
+    model = PublicationScientistRelationship
 
 
 #################
@@ -74,6 +86,11 @@ class ScientistToDataRelationshipInline(FromScientist, ToData,
 
 @admin.register(DataPublicationRelationship)
 class DataPublicationsAdmin(GenericAdminModelAdmin):
+    pass
+
+
+@admin.register(PublicationScientistRelationship)
+class PublicationScientistAdmin(GenericAdminModelAdmin):
     pass
 
 

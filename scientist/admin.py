@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from glue.admin import ScientistToDataRelationshipInline
+from glue.admin import (ScientistToDataRelationshipInline,
+    ScientistToPublicationRelationshipInline)
 from genericadmin.admin import GenericAdminModelAdmin
 
 from .models import Scientist
@@ -9,4 +10,5 @@ from .models import Scientist
 class ScientistAdmin(GenericAdminModelAdmin):
     inlines = [
         ScientistToDataRelationshipInline,
+        ScientistToPublicationRelationshipInline,
     ]

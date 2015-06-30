@@ -79,3 +79,9 @@ class DataScientistRelationship(DataRelationshipBase, ScientistRelationshipBase)
 
     def __str__(self):
         return "{} ⟷ {}".format(self.data_identifier(), self.scientists_identifier())
+
+
+class PublicationScientistRelationship(PublicationRelationshipBase, ScientistRelationshipBase):
+
+    def __str__(self):
+        return "{} ⟷ {}".format(self.publications_identifier(), self.scientists_identifier())
