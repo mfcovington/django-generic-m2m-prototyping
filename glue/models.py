@@ -18,6 +18,11 @@ class RelatedContent(models.Model):
         return "{}: {}".format(self.content_type.name, self.content_object)
 
 
+################
+# BASE CLASSES #
+################
+
+
 class DataRelationshipBase(models.Model):
     data_limit = models.Q(app_label='data', model='data') | \
         models.Q(app_label='data', model='dataset')
@@ -57,6 +62,11 @@ class ScientistRelationshipBase(models.Model):
 
     class Meta:
         abstract = True
+
+
+#####################
+# COMPOSITE CLASSES #
+#####################
 
 
 class DataPublicationRelationship(DataRelationshipBase, PublicationRelationshipBase):
