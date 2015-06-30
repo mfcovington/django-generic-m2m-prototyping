@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from genericadmin.admin import GenericAdminModelAdmin, GenericTabularInline
 
-from .models import DataPublicationRelationship, RelatedContent
+from .models import (DataPublicationRelationship, DataScientistRelationship,
+    RelatedContent)
 
 
 #######################
@@ -20,12 +21,21 @@ class FromPublication():
     ct_fk_field = 'publications_object_id'
 
 
+class FromScientist():
+    ct_field = 'scientists_content_type'
+    ct_fk_field = 'scientists_object_id'
+
+
 class ToData():
     ordering = ['data_content_type']
 
 
 class ToPublication():
     ordering = ['publications_content_type']
+
+
+class ToScientist():
+    ordering = ['scientists_content_type']
 
 
 ############################
@@ -39,10 +49,22 @@ class DataToPublicationRelationshipInline(FromData, ToPublication,
     model = DataPublicationRelationship
 
 
+class DataToScientistRelationshipInline(FromData, ToScientist,
+    GenericTabularInline):
+
+    model = DataScientistRelationship
+
+
 class PublicationToDataRelationshipInline(FromPublication, ToData,
     GenericTabularInline):
 
     model = DataPublicationRelationship
+
+
+class ScientistToDataRelationshipInline(FromScientist, ToData,
+    GenericTabularInline):
+
+    model = DataScientistRelationship
 
 
 #################
@@ -55,6 +77,9 @@ class DataPublicationsAdmin(GenericAdminModelAdmin):
     pass
 
 
+@admin.register(DataScientistRelationship)
+class DataScientistsAdmin(GenericAdminModelAdmin):
+    pass
 class RelatedContentInline(GenericTabularInline):
     model = RelatedContent
     ct_field = 'parent_content_type' # See below (1).

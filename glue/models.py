@@ -46,7 +46,26 @@ class PublicationRelationshipBase(models.Model):
         abstract = True
 
 
+class ScientistRelationshipBase(models.Model):
+    scientists_limit = models.Q(app_label='scientist', model='scientist')
+    scientists_content_type = models.ForeignKey(ContentType, limit_choices_to=scientists_limit, related_name='%(app_label)s_%(class)s_related_scientists')
+    scientists_object_id = models.PositiveIntegerField()
+    scientists_content_object = GenericForeignKey('scientists_content_type', 'scientists_object_id')
+
+    def scientists_identifier(self):
+        return "{}: {}".format(self.scientists_content_type.name, self.scientists_content_object)
+
+    class Meta:
+        abstract = True
+
+
 class DataPublicationRelationship(DataRelationshipBase, PublicationRelationshipBase):
 
     def __str__(self):
         return "{} ⟷ {}".format(self.data_identifier(), self.publications_identifier())
+
+
+class DataScientistRelationship(DataRelationshipBase, ScientistRelationshipBase):
+
+    def __str__(self):
+        return "{} ⟷ {}".format(self.data_identifier(), self.scientists_identifier())
