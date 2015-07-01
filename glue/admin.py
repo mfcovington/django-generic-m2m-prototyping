@@ -5,28 +5,14 @@ from genericadmin.admin import (GenericAdminModelAdmin, GenericStackedInline,
 
 from .models import (DataPublicationsRelationship, DataScientistsRelationship,
     PublicationsScientistsRelationship)
+from .relationships import RELATIONSHIPS
 
 
-######################################################
-# RELATIONSHIPS FOR GENERATED ADMIN & INLINE CLASSES #
-######################################################
-# For example, ('data', 'publications') yields:      #
-# - DataToPublicationsRelationshipInline             #
-# - PublicationsToDataRelationshipInline             #
-# - DataPublicationsAdmin                            #
-######################################################
-
-
-relationships = [
-    ('data', 'publications'),
-    ('data', 'scientists'),
-    ('publications', 'scientists'),
-]
-
-
-###################################
-# ADMIN & INLINE CLASS GENERATORS #
-###################################
+############################################
+# ADMIN & INLINE CLASS GENERATORS          #
+############################################
+# Define relationships in relationships.py #
+############################################
 
 
 def generate_inline_model(relationship, tabular=True):
@@ -96,7 +82,7 @@ def generate_and_register_admin_model(relationship):
 ####################
 
 
-for r in relationships:
+for r in RELATIONSHIPS:
     generate_inline_model(sorted(r))
     generate_inline_model(sorted(r, reverse=True))
     generate_and_register_admin_model(r)
