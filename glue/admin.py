@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from genericadmin.admin import GenericAdminModelAdmin, GenericTabularInline
+from genericadmin.admin import (GenericAdminModelAdmin, GenericStackedInline,
+    GenericTabularInline)
 
 from .models import (DataPublicationsRelationship, DataScientistsRelationship,
     PublicationsScientistsRelationship)
@@ -28,12 +29,12 @@ relationships = [
 ###################################
 
 
-def generate_tabular_inline_model(relationship):
+def generate_inline_model(relationship, tabular=True):
     """
     Generates a tabular inline model from a relationship tuple.
 
     Usage:
-        generate_tabular_inline_model(('data', 'publications'))
+        generate_inline_model(('data', 'publications'))
 
     Equivalent To:
         class DataToPublicationsRelationshipInline(GenericTabularInline):
@@ -44,9 +45,15 @@ def generate_tabular_inline_model(relationship):
     """
     content_1, content_2 = relationship
     klass_name = '{}To{}RelationshipInline'.format(content_1.capitalize(), content_2.capitalize())
+
+    if tabular:
+        inline_style = GenericTabularInline
+    else:
+        inline_style = GenericStackedInline
+
     klass = type(
         klass_name,
-        (GenericTabularInline,),
+        (inline_style,),
         {
             'ct_field': '{}_content_type'.format(content_1.lower()),
             'ct_fk_field': '{}_object_id'.format(content_1.lower()),
@@ -90,6 +97,6 @@ def generate_and_register_admin_model(relationship):
 
 
 for r in relationships:
-    generate_tabular_inline_model(sorted(r))
-    generate_tabular_inline_model(sorted(r, reverse=True))
+    generate_inline_model(sorted(r))
+    generate_inline_model(sorted(r, reverse=True))
     generate_and_register_admin_model(r)
