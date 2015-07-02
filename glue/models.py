@@ -14,7 +14,7 @@ from .relationships import LIMITS, RELATIONSHIPS
 # Define relationships & choice limits in relationships.py #
 ############################################################
 
-def generate_relationship_model(relationship):
+def generate_relationship_model(relationship, ct_choice_limits):
     """
     Generates a relationship model from a relationship tuple and
     a dictionary with content type choice limits.
@@ -31,7 +31,7 @@ def generate_relationship_model(relationship):
                 {'app_label': 'publication', 'model': 'publicationset' },
             ],
         }
-        generate_relationship_model(('data', 'publications'))
+        generate_relationship_model(('data', 'publications'), LIMITS)
 
 
     Equivalent To:
@@ -71,7 +71,7 @@ def generate_relationship_model(relationship):
 
     for content in map(lambda x: x.lower(), relationship):
         queries = []
-        for lim in LIMITS[content]:
+        for lim in ct_choice_limits[content]:
             queries.append(models.Q(**lim))
         limit = reduce(operator.or_, queries, models.Q())
 
@@ -104,4 +104,4 @@ def generate_relationship_model(relationship):
 #####################################################
 
 for r in RELATIONSHIPS:
-    generate_relationship_model(r)
+    generate_relationship_model(r, LIMITS)
