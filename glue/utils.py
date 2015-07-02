@@ -1,7 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
 
-from .models import DataPublicationsRelationship
-
 
 def get_related_content(object, object_type, related_type):
     """
