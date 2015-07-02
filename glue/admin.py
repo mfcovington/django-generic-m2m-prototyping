@@ -3,8 +3,6 @@ from django.contrib import admin
 from genericadmin.admin import (GenericAdminModelAdmin, GenericStackedInline,
     GenericTabularInline)
 
-from .models import (DataPublicationsRelationship, DataScientistsRelationship,
-    PublicationsScientistsRelationship)
 from .relationships import RELATIONSHIPS
 
 
@@ -14,6 +12,26 @@ from .relationships import RELATIONSHIPS
 # Define relationships in relationships.py #
 ############################################
 
+
+def import_relationship_model(relationship):
+    """
+    Imports a relationship model.
+
+    Usage:
+
+        import_relationship_model(('data', 'publications'))
+
+
+    Equivalent To:
+
+        import DataPublicationsRelationship
+    """
+    from importlib import import_module
+    content_1, content_2 = sorted(map(lambda x: x.capitalize(), relationship))
+    relationship_class_name = '{}{}Relationship'.format(content_1, content_2)
+    relationship_class = getattr(import_module(".models", package=__package__),
+        relationship_class_name)
+    globals()[relationship_class_name] = relationship_class
 
 def generate_inline_model(relationship, tabular=True):
     """
@@ -83,6 +101,7 @@ def generate_and_register_admin_model(relationship):
 
 
 for r in RELATIONSHIPS:
+    import_relationship_model(r)
     generate_inline_model(sorted(r))
     generate_inline_model(sorted(r, reverse=True))
     generate_and_register_admin_model(r)
