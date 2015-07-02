@@ -5,7 +5,7 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
-from .relationships import LIMITS, RELATIONSHIPS
+from .relationships import CT_LIMITS, RELATIONSHIPS
 
 
 ############################################################
@@ -21,7 +21,7 @@ def generate_relationship_model(relationship, ct_choice_limits):
 
     Usage:
 
-        LIMITS = {
+        CT_LIMITS = {
             'data': [
                 {'app_label': 'data', 'model': 'data' },
                 {'app_label': 'data', 'model': 'dataset' },
@@ -31,7 +31,7 @@ def generate_relationship_model(relationship, ct_choice_limits):
                 {'app_label': 'publication', 'model': 'publicationset' },
             ],
         }
-        generate_relationship_model(('data', 'publications'), LIMITS)
+        generate_relationship_model(('data', 'publications'), CT_LIMITS)
 
 
     Equivalent To:
@@ -97,11 +97,11 @@ def generate_relationship_model(relationship, ct_choice_limits):
     globals()[klass_name] = klass
 
 
-#####################################################
-# GENERATE RELATIONSHIP CLASSES                     #
-#####################################################
-# Define LIMITS & RELATIONSHIPS in relationships.py #
-#####################################################
+########################################################
+# GENERATE RELATIONSHIP CLASSES                        #
+########################################################
+# Define CT_LIMITS & RELATIONSHIPS in relationships.py #
+########################################################
 
 for r in RELATIONSHIPS:
-    generate_relationship_model(r, LIMITS)
+    generate_relationship_model(r, CT_LIMITS)

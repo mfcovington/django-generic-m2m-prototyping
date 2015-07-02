@@ -32,7 +32,7 @@ RELATIONSHIPS = [
 #######################################################
 
 
-LIMITS = {
+CT_LIMITS = {
     'data': [
         {'app_label': 'data', 'model': 'data' },
         {'app_label': 'data', 'model': 'dataset' },
