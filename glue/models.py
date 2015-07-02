@@ -1,72 +1,58 @@
+import operator
+from functools import reduce
+
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 
-
-################
-# BASE CLASSES #
-################
+from .relationships import LIMITS, RELATIONSHIPS
 
 
-class DataRelationshipBase(models.Model):
-    data_limit = models.Q(app_label='data', model='data') | \
-        models.Q(app_label='data', model='dataset')
-    data_content_type = models.ForeignKey(ContentType, limit_choices_to=data_limit, related_name='%(app_label)s_%(class)s_related_data')
-    data_object_id = models.PositiveIntegerField()
-    data_content_object = GenericForeignKey('data_content_type', 'data_object_id')
-
-    def data_identifier(self):
-        return "{}: {}".format(self.data_content_type.name.upper(), self.data_content_object)
-
-    class Meta:
-        abstract = True
+############################################################
+# RELATIONSHIP CLASS GENERATOR                             #
+############################################################
+# Define relationships & choice limits in relationships.py #
+############################################################
 
 
-class PublicationsRelationshipBase(models.Model):
-    publications_limit = models.Q(app_label='publication', model='publication') | \
-        models.Q(app_label='publication', model='publicationset')
-    publications_content_type = models.ForeignKey(ContentType, limit_choices_to=publications_limit, related_name='%(app_label)s_%(class)s_related_publications')
-    publications_object_id = models.PositiveIntegerField()
-    publications_content_object = GenericForeignKey('publications_content_type', 'publications_object_id')
+def generate_relationship_model(relationship):
+    content_1, content_2 = sorted(relationship)
+    klass_name = '{}{}Relationship'.format(content_1.capitalize(),
+        content_2.capitalize())
+    typedict = {'__module__': __name__,}
 
-    def publications_identifier(self):
-        return "{}: {}".format(self.publications_content_type.name.upper(), self.publications_content_object)
+    for content in map(lambda x: x.lower(), relationship):
+        queries = []
+        for lim in LIMITS[content]:
+            queries.append(models.Q(**lim))
+        limit = reduce(operator.or_, queries, models.Q())
 
-    class Meta:
-        abstract = True
-
-
-class ScientistsRelationshipBase(models.Model):
-    scientists_limit = models.Q(app_label='scientist', model='scientist')
-    scientists_content_type = models.ForeignKey(ContentType, limit_choices_to=scientists_limit, related_name='%(app_label)s_%(class)s_related_scientists')
-    scientists_object_id = models.PositiveIntegerField()
-    scientists_content_object = GenericForeignKey('scientists_content_type', 'scientists_object_id')
-
-    def scientists_identifier(self):
-        return "{}: {}".format(self.scientists_content_type.name.upper(), self.scientists_content_object)
-
-    class Meta:
-        abstract = True
-
-
-#####################
-# COMPOSITE CLASSES #
-#####################
-
-
-class DataPublicationsRelationship(DataRelationshipBase, PublicationsRelationshipBase):
+        typedict.update({
+            '{}_content_type'.format(content): models.ForeignKey(ContentType,
+                limit_choices_to=limit,
+                related_name='%(app_label)s_%(class)s_related_{}'.format(content)),
+            '{}_object_id'.format(content): models.PositiveIntegerField(),
+            '{}_content_object'.format(content): GenericForeignKey(
+                '{}_content_type'.format(content), '{}_object_id'.format(content)),
+        })
 
     def __str__(self):
-        return "{} ⟷ {}".format(self.data_identifier(), self.publications_identifier())
+        return '{}: {} ⟷  {}: {}'.format(
+            getattr(self, '{}_content_type'.format(content_1)).name.upper(),
+            getattr(self, '{}_content_object'.format(content_1)),
+            getattr(self, '{}_content_type'.format(content_2)).name.upper(),
+            getattr(self, '{}_content_object'.format(content_2)),
+        )
+
+    typedict['__str__'] = __str__
+    klass = type(klass_name, (models.Model,), typedict)
+    globals()[klass_name] = klass
 
 
-class DataScientistsRelationship(DataRelationshipBase, ScientistsRelationshipBase):
+####################
+# GENERATE CLASSES #
+####################
 
-    def __str__(self):
-        return "{} ⟷ {}".format(self.data_identifier(), self.scientists_identifier())
 
-
-class PublicationsScientistsRelationship(PublicationsRelationshipBase, ScientistsRelationshipBase):
-
-    def __str__(self):
-        return "{} ⟷ {}".format(self.publications_identifier(), self.scientists_identifier())
+for r in RELATIONSHIPS:
+    generate_relationship_model(r)
