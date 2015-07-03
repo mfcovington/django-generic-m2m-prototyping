@@ -8,16 +8,16 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from .relationships import CT_LIMITS, RELATIONSHIPS
 
 
-############################################################
-# RELATIONSHIP CLASS GENERATOR                             #
-############################################################
-# Define relationships & choice limits in relationships.py #
-############################################################
+########################################################
+# RELATIONSHIP CLASS GENERATOR                         #
+########################################################
+# Define CT_LIMITS & RELATIONSHIPS in relationships.py #
+########################################################
 
 def generate_relationship_model(relationship, ct_choice_limits):
     """
     Generates a relationship model from a relationship tuple and
-    a dictionary with content type choice limits.
+    a dictionary with content type limits.
 
     Usage:
 

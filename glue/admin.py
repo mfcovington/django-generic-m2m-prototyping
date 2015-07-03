@@ -9,9 +9,8 @@ from .relationships import RELATIONSHIPS
 ############################################
 # ADMIN & INLINE CLASS GENERATORS          #
 ############################################
-# Define relationships in relationships.py #
+# Define RELATIONSHIPS in relationships.py #
 ############################################
-
 
 def import_relationship_model(relationship):
     """
@@ -38,9 +37,12 @@ def generate_inline_model(relationship, tabular=True):
     Generates a tabular inline model from a relationship tuple.
 
     Usage:
+
         generate_inline_model(('data', 'publications'))
 
+
     Equivalent To:
+
         class DataToPublicationsRelationshipInline(GenericTabularInline):
             model = DataPublicationsRelationship
             ct_field = 'data_content_type'
@@ -73,9 +75,11 @@ def generate_and_register_admin_model(relationship):
     Generates and registers an admin model from a relationship tuple.
 
     Usage:
+
         generate_and_register_admin_model(('data', 'publications'))
 
     Equivalent To:
+
         class DataPublicationsAdmin(GenericAdminModelAdmin):
             pass
         admin.site.register(DataPublicationsRelationship, DataPublicationsAdmin)
@@ -95,10 +99,11 @@ def generate_and_register_admin_model(relationship):
     admin.site.register(model, klass_name)
 
 
-####################
-# GENERATE CLASSES #
-####################
-
+############################################
+# GENERATE ADMIN & INLINE CLASSES          #
+############################################
+# Define RELATIONSHIPS in relationships.py #
+############################################
 
 for r in RELATIONSHIPS:
     import_relationship_model(r)

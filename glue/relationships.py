@@ -17,7 +17,7 @@ RELATIONSHIPS = [
 
 
 #######################################################
-# CHOICE LIMITS FOR GENERATING MODEL CLASSES          #
+# CONTENT TYPE LIMITS FOR GENERATING MODEL CLASSES    #
 #######################################################
 # For example, the following would limit the choices  #
 # when selecting a related app and its model for a    #
