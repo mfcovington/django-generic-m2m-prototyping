@@ -35,6 +35,7 @@ def get_relationship_inlines(object_type, relationships=None, related_types=None
         RELATIONSHIPS = [
             ('data', 'publications'),
             ('data', 'scientists'),
+            ('publications', 'scientists'),
         ]
 
         # data/admin.py:
