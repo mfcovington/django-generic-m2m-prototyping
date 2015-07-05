@@ -1,14 +1,14 @@
+from django.conf import settings
 from django.contrib import admin
 
-from glue.admin import (DataToPublicationsRelationshipInline,
-    DataToScientistsRelationshipInline)
 from genericadmin.admin import GenericAdminModelAdmin
 
 from .models import Data, DataSet
 
+
 @admin.register(Data, DataSet)
 class DataAdmin(GenericAdminModelAdmin):
-    inlines = [
-        DataToPublicationsRelationshipInline,
-        DataToScientistsRelationshipInline
-    ]
+    if 'glue' in settings.INSTALLED_APPS:
+        from glue.relationships import RELATIONSHIPS
+        from glue.utils import get_relationship_inlines
+        inlines = get_relationship_inlines('data', relationships=RELATIONSHIPS)
