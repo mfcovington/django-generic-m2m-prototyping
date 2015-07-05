@@ -62,6 +62,22 @@ def get_relationship_inlines(object_type, relationships=None, related_types=None
                 DataToScientistsRelationshipInline
             ]
     """
+    related_types = validate_and_process_related(object_type, relationships,
+        related_types)
+
+    from importlib import import_module
+
+    inlines = []
+    for related in related_types:
+        inline_class_name = '{}To{}RelationshipInline'.format(object_type.capitalize(), related.capitalize())
+        inline_class = getattr(import_module('.admin', package=__package__),
+            inline_class_name)
+        globals()[inline_class_name] = inline_class
+        inlines.append(inline_class)
+
+    return inlines
+
+def validate_and_process_related(object_type, relationships=[], related_types=[]):
     if relationships is None:
         relationships = []
 
@@ -78,14 +94,4 @@ def get_relationship_inlines(object_type, relationships=None, related_types=None
                     if related != object_type])
         related_types = sorted(related_types)
 
-    from importlib import import_module
-
-    inlines = []
-    for related in related_types:
-        inline_class_name = '{}To{}RelationshipInline'.format(object_type.capitalize(), related.capitalize())
-        inline_class = getattr(import_module('.admin', package=__package__),
-            inline_class_name)
-        globals()[inline_class_name] = inline_class
-        inlines.append(inline_class)
-
-    return inlines
+    return related_types
