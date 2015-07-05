@@ -78,6 +78,11 @@ def get_relationship_inlines(object_type, relationships=None, related_types=None
     return inlines
 
 def validate_and_process_related(object_type, relationships=[], related_types=[]):
+    """
+    Validate that either 'relationships' or 'related_types' has content.
+    If 'relationships' is used, extract, sort, and return relevant 'related_types'.
+    If 'related_types' is used, return contents in their original order.
+    """
     if relationships is None:
         relationships = []
 
