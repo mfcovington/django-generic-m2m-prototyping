@@ -2,10 +2,9 @@ from django.conf import settings
 from django.db import models
 
 if 'glue' in settings.INSTALLED_APPS:
-    from glue.relationships import RELATIONSHIPS
     from glue.utils import relations_abstract_base
     PublicationRelationsBase = relations_abstract_base('publications',
-        relationships=RELATIONSHIPS)
+        relationships=settings.RELATIONSHIPS)
 else:
     PublicationRelationsBase = models.Model
 

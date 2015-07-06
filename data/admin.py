@@ -9,6 +9,6 @@ from .models import Data, DataSet
 @admin.register(Data, DataSet)
 class DataAdmin(GenericAdminModelAdmin):
     if 'glue' in settings.INSTALLED_APPS:
-        from glue.relationships import RELATIONSHIPS
         from glue.utils import get_relationship_inlines
-        inlines = get_relationship_inlines('data', relationships=RELATIONSHIPS)
+        inlines = get_relationship_inlines('data',
+            relationships=settings.RELATIONSHIPS)

@@ -1,16 +1,15 @@
+from django.conf import settings
 from django.contrib import admin
 
 from genericadmin.admin import (GenericAdminModelAdmin, GenericStackedInline,
     GenericTabularInline)
 
-from .relationships import RELATIONSHIPS
 
-
-############################################
-# ADMIN & INLINE CLASS GENERATORS          #
-############################################
-# Define RELATIONSHIPS in relationships.py #
-############################################
+#######################################
+# ADMIN & INLINE CLASS GENERATORS     #
+#######################################
+# Define RELATIONSHIPS in settings.py #
+#######################################
 
 def import_relationship_model(relationship):
     """
@@ -99,13 +98,13 @@ def generate_and_register_admin_model(relationship):
     admin.site.register(model, klass_name)
 
 
-############################################
-# GENERATE ADMIN & INLINE CLASSES          #
-############################################
-# Define RELATIONSHIPS in relationships.py #
-############################################
+#######################################
+# GENERATE ADMIN & INLINE CLASSES     #
+#######################################
+# Define RELATIONSHIPS in settings.py #
+#######################################
 
-for r in RELATIONSHIPS:
+for r in settings.RELATIONSHIPS:
     import_relationship_model(r)
     generate_inline_model(sorted(r))
     generate_inline_model(sorted(r, reverse=True))

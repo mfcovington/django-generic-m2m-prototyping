@@ -32,7 +32,7 @@ def get_relationship_inlines(object_type, relationships=None, related_types=None
 
     Usage:
 
-        # glue/relationships.py:
+        # settings.py:
 
         RELATIONSHIPS = [
             ('data', 'publications'),
@@ -85,7 +85,7 @@ def relations_abstract_base(object_type, relationships=None, related_types=None)
 
     Usage:
 
-        # glue/relationships.py:
+        # settings.py:
 
         RELATIONSHIPS = [
             ('data', 'publications'),

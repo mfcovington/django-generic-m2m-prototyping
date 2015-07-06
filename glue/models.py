@@ -1,18 +1,17 @@
 import operator
 from functools import reduce
 
-from django.db import models
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.db import models
 
-from .relationships import CT_LIMITS, RELATIONSHIPS
 
-
-########################################################
-# RELATIONSHIP CLASS GENERATOR                         #
-########################################################
-# Define CT_LIMITS & RELATIONSHIPS in relationships.py #
-########################################################
+###################################################
+# RELATIONSHIP CLASS GENERATOR                    #
+###################################################
+# Define CT_LIMITS & RELATIONSHIPS in settings.py #
+###################################################
 
 def generate_relationship_model(relationship, ct_choice_limits):
     """
@@ -97,11 +96,11 @@ def generate_relationship_model(relationship, ct_choice_limits):
     globals()[klass_name] = klass
 
 
-########################################################
-# GENERATE RELATIONSHIP CLASSES                        #
-########################################################
-# Define CT_LIMITS & RELATIONSHIPS in relationships.py #
-########################################################
+###################################################
+# GENERATE RELATIONSHIP CLASSES                   #
+###################################################
+# Define CT_LIMITS & RELATIONSHIPS in settings.py #
+###################################################
 
-for r in RELATIONSHIPS:
-    generate_relationship_model(r, CT_LIMITS)
+for r in settings.RELATIONSHIPS:
+    generate_relationship_model(r, settings.CT_LIMITS)
