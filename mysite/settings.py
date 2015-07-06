@@ -42,7 +42,7 @@ INSTALLED_APPS = (
     'data',
     'publication',
     'scientist',
-    'glue',
+    'django_velcro',
 )
 
 MIDDLEWARE_CLASSES = (
