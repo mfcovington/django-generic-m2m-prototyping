@@ -1,14 +1,16 @@
 from django.conf import settings
 from django.contrib import admin
 
-from genericadmin.admin import GenericAdminModelAdmin
-
 from .models import Scientist
+
+if 'django_velcro' in settings.INSTALLED_APPS:
+    from django_velcro.utils import generic_admin_base
+    ScientistGenericAdminBase = generic_admin_base('scientists',
+        relationships=settings.RELATIONSHIPS)
+else:
+    ScientistGenericAdminBase = admin.ModelAdmin
 
 
 @admin.register(Scientist)
-class ScientistAdmin(GenericAdminModelAdmin):
-    if 'django_velcro' in settings.INSTALLED_APPS:
-        from django_velcro.utils import get_relationship_inlines
-        inlines = get_relationship_inlines('scientists',
-            relationships=settings.RELATIONSHIPS)
+class ScientistAdmin(ScientistGenericAdminBase):
+    pass

@@ -1,7 +1,68 @@
+from django.contrib import admin
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+from genericadmin.admin import GenericAdminModelAdmin
+
+
+def generic_admin_base(object_type, relationships=None, related_types=None):
+    """
+    Create an abstract base class that has inlines for related content
+    and extends GenericAdminModelAdmin (from 'genericadmin.admin').
+
+    Usage:
+
+        # settings.py:
+
+        RELATIONSHIPS = [
+            ('data', 'publications'),
+            ('data', 'scientists'),
+            ('publications', 'scientists'),
+        ]
+
+        # data/admin.py:
+
+        from django.conf import settings
+
+        if 'django_velcro' in settings.INSTALLED_APPS:
+            from django_velcro.utils import generic_admin_base
+            DataGenericAdminBase = generic_admin_base('data',
+                relationships=settings.RELATIONSHIPS)
+        else:
+            DataGenericAdminBase = admin.ModelAdmin
+
+
+    Equivalent To:
+
+        class DataGenericAdminBase(GenericAdminModelAdmin):
+            inlines = [
+                DataToPublicationsRelationshipInline,
+                DataToScientistsRelationshipInline,
+            ]
+
+            class Meta:
+                abstract = True
+    """
+    inlines = get_relationship_inlines(object_type,
+        relationships=relationships, related_types=related_types)
+
+    class Meta:
+        abstract = True
+
+    typedict = {
+        '__module__': __name__,
+        'Meta': Meta,
+        'inlines': inlines
+    }
+
+    klass_name = '{}GenericAdminBase'.format(object_type.capitalize())
+    klass = type(
+        klass_name,
+        (GenericAdminModelAdmin,),
+        typedict
+    )
+    return klass
 
 def get_related_content(object, object_type, related_type):
     """
