@@ -1,21 +1,17 @@
-from django.contrib.contenttypes.fields import GenericRelation
+from django.conf import settings
 from django.db import models
 
-from glue.models import DataScientistsRelationship, PublicationsScientistsRelationship
+if 'glue' in settings.INSTALLED_APPS:
+    from glue.relationships import RELATIONSHIPS
+    from glue.utils import relations_abstract_base
+    ScientistRelationsBase = relations_abstract_base('scientists',
+        relationships=RELATIONSHIPS)
+else:
+    ScientistRelationsBase = models.Model
 
 
-class Scientist(models.Model):
+class Scientist(ScientistRelationsBase):
     name = models.CharField(max_length=50)
-    related_data = GenericRelation(DataScientistsRelationship,
-        content_type_field='data_content_type',
-        object_id_field='data_object_id',
-        related_query_name='scientists',
-    )
-    related_publications = GenericRelation(PublicationsScientistsRelationship,
-        content_type_field='publications_content_type',
-        object_id_field='publications_object_id',
-        related_query_name='scientists',
-    )
 
     def __str__(self):
         return self.name

@@ -1,23 +1,13 @@
-from django.contrib.contenttypes.fields import GenericRelation
+from django.conf import settings
 from django.db import models
 
-from glue.models import DataPublicationsRelationship, DataScientistsRelationship
-
-
-class DataRelationsBase(models.Model):
-    related_publications = GenericRelation(DataPublicationsRelationship,
-        content_type_field='publications_content_type',
-        object_id_field='publications_object_id',
-        related_query_name='data',
-    )
-    related_scientists = GenericRelation(DataScientistsRelationship,
-        content_type_field='scientists_content_type',
-        object_id_field='scientists_object_id',
-        related_query_name='data',
-    )
-
-    class Meta:
-        abstract = True
+if 'glue' in settings.INSTALLED_APPS:
+    from glue.relationships import RELATIONSHIPS
+    from glue.utils import relations_abstract_base
+    DataRelationsBase = relations_abstract_base('data',
+        relationships=RELATIONSHIPS)
+else:
+    DataRelationsBase = models.Model
 
 
 class Data(DataRelationsBase):
