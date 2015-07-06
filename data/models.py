@@ -1,8 +1,8 @@
 from django.conf import settings
 from django.db import models
 
-if 'glue' in settings.INSTALLED_APPS:
-    from glue.utils import relations_abstract_base
+if 'django_velcro' in settings.INSTALLED_APPS:
+    from django_velcro.utils import relations_abstract_base
     DataRelationsBase = relations_abstract_base('data',
         relationships=settings.RELATIONSHIPS)
 else:

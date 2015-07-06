@@ -44,9 +44,9 @@ def get_relationship_inlines(object_type, relationships=None, related_types=None
 
         @admin.register(Data, DataSet)
         class DataAdmin(GenericAdminModelAdmin):
-            if 'glue' in settings.INSTALLED_APPS:
-                from glue.relationships import RELATIONSHIPS
-                from glue.utils import get_relationship_inlines
+            if 'django_velcro' in settings.INSTALLED_APPS:
+                from django_velcro.relationships import RELATIONSHIPS
+                from django_velcro.utils import get_relationship_inlines
                 inlines = get_relationship_inlines('data', relationships=RELATIONSHIPS)
 
 
@@ -54,7 +54,7 @@ def get_relationship_inlines(object_type, relationships=None, related_types=None
 
         # data/admin.py:
 
-        from glue.admin import (DataToPublicationsRelationshipInline,
+        from django_velcro.admin import (DataToPublicationsRelationshipInline,
             DataToScientistsRelationshipInline)
 
         @admin.register(Data, DataSet)
@@ -97,9 +97,9 @@ def relations_abstract_base(object_type, relationships=None, related_types=None)
 
         from django.conf import settings
 
-        if 'glue' in settings.INSTALLED_APPS:
-            from glue.relationships import RELATIONSHIPS
-            from glue.utils import relations_abstract_base
+        if 'django_velcro' in settings.INSTALLED_APPS:
+            from django_velcro.relationships import RELATIONSHIPS
+            from django_velcro.utils import relations_abstract_base
             DataRelationsBase = relations_abstract_base('data', relationships=RELATIONSHIPS)
         else:
             DataRelationsBase = models.Model
