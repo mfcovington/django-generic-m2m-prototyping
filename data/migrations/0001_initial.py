@@ -13,11 +13,24 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Data',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
                 ('name', models.CharField(max_length=50)),
                 ('description', models.TextField()),
             ],
             options={
+                'ordering': ['name'],
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='DataSet',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('name', models.CharField(max_length=50)),
+                ('description', models.TextField()),
+            ],
+            options={
+                'ordering': ['name'],
             },
             bases=(models.Model,),
         ),
