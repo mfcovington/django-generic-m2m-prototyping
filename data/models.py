@@ -1,15 +1,17 @@
 from django.conf import settings
 from django.db import models
 
-if 'django_velcro' in settings.INSTALLED_APPS:
-    from django_velcro.utils import relations_abstract_base
-    DataRelationsBase = relations_abstract_base('data',
-        relationships=settings.RELATIONSHIPS)
-else:
-    DataRelationsBase = models.Model
+def relations_base(object_type):
+    if 'django_velcro' in settings.INSTALLED_APPS:
+        from django_velcro.utils import relations_abstract_base
+        RelationsBase = relations_abstract_base(object_type,
+            relationships=settings.RELATIONSHIPS)
+    else:
+        RelationsBase = models.Model
+    return RelationsBase
 
 
-class Data(DataRelationsBase):
+class Data(relations_base('data')):
     name = models.CharField(max_length=50,)
     description = models.TextField()
 
@@ -20,7 +22,7 @@ class Data(DataRelationsBase):
         ordering = ['name']
 
 
-class DataSet(DataRelationsBase):
+class DataSet(relations_base('data')):
     name = models.CharField(max_length=50,)
     description = models.TextField()
 
