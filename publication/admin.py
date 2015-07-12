@@ -3,14 +3,16 @@ from django.contrib import admin
 
 from .models import Publication, PublicationSet
 
-if 'django_velcro' in settings.INSTALLED_APPS:
-    from django_velcro.utils import generic_admin_base
-    PublicationGenericAdminBase = generic_admin_base('publications',
-        relationships=settings.RELATIONSHIPS)
-else:
-    PublicationGenericAdminBase = admin.ModelAdmin
+def admin_base(object_type):
+    if 'django_velcro' in settings.INSTALLED_APPS:
+        from django_velcro.utils import generic_admin_base
+        GenericAdminBase = generic_admin_base(object_type,
+            relationships=settings.RELATIONSHIPS)
+    else:
+        GenericAdminBase = admin.ModelAdmin
+    return GenericAdminBase
 
 
 @admin.register(Publication, PublicationSet)
-class PublicationAdmin(PublicationGenericAdminBase):
+class PublicationAdmin(admin_base('publications')):
     pass

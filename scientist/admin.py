@@ -3,14 +3,16 @@ from django.contrib import admin
 
 from .models import Scientist
 
-if 'django_velcro' in settings.INSTALLED_APPS:
-    from django_velcro.utils import generic_admin_base
-    ScientistGenericAdminBase = generic_admin_base('scientists',
-        relationships=settings.RELATIONSHIPS)
-else:
-    ScientistGenericAdminBase = admin.ModelAdmin
+def admin_base(object_type):
+    if 'django_velcro' in settings.INSTALLED_APPS:
+        from django_velcro.utils import generic_admin_base
+        GenericAdminBase = generic_admin_base(object_type,
+            relationships=settings.RELATIONSHIPS)
+    else:
+        GenericAdminBase = admin.ModelAdmin
+    return GenericAdminBase
 
 
 @admin.register(Scientist)
-class ScientistAdmin(ScientistGenericAdminBase):
+class ScientistAdmin(admin_base('scientists')):
     pass
