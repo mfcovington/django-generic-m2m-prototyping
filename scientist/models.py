@@ -4,7 +4,8 @@ from django.db import models
 def relations_base(object_type):
     if 'django_velcro' in settings.INSTALLED_APPS:
         from django_velcro.utils import relations_abstract_base
-        RelationsBase = relations_abstract_base(object_type)
+        RelationsBase = relations_abstract_base(object_type,
+            relationships=settings.RELATIONSHIPS)
     else:
         RelationsBase = models.Model
     return RelationsBase
